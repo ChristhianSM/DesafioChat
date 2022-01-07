@@ -4,4 +4,7 @@ export const types = {
 
     uiStartLoading : '[UI] Start Loading',
     uiFinishLoading : '[UI] Finish Loading',
+
+    // Rooms
+    enterRoom : "Enter id Rooms"
 }

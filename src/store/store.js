@@ -1,12 +1,14 @@
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
 import { authReducer } from '../reducers/AuthReducers';
+import { RoomsReducers } from '../reducers/RoomsReducers';
 
 
 const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
 const reducers = combineReducers({
-    auth : authReducer
+    auth : authReducer,
+    room : RoomsReducers
 });
 
 

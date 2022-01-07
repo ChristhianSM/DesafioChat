@@ -1,5 +1,9 @@
+import { addDoc, collection } from 'firebase/firestore'
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+import { enterRoom } from '../../actions/rooms'
+import { db } from '../../firebase'
 
 const SidebarOptionContainer =  styled.div`
     display: flex;
@@ -22,18 +26,33 @@ const SidebarOptionContainer =  styled.div`
 
     
 `
-const SidebarOptionChannel =  styled.div`
+const SidebarOptionChannel =  styled.h3`
+    padding : 10px 0;
+    font-weight: 300;
 `
 
 
-export const SidebarOption = ({Icon, title, addChannelOption}) => {
+export const SidebarOption = ({Icon, title, addChannelOption,id}) => {
+    const dispatch = useDispatch();
 
-    const addChannel = () => {
-        console.log("Hola")
+    const addChannel = async () => {
+        const channelName = prompt("Ingrese el nombre dle canal");
+        if (channelName) {
+            try {
+                const docRef = await addDoc(collection(db, "rooms"), {
+                  name : channelName
+                });
+                console.log("Document written with ID: ", docRef.id);
+              } catch (e) {
+                console.error("Error adding document: ", e);
+              }
+        }
     }
 
     const selectChannel = () => {
-
+        if (id) {
+            dispatch(enterRoom(id));
+        }
     }
 
     return (
@@ -46,7 +65,7 @@ export const SidebarOption = ({Icon, title, addChannelOption}) => {
                 ? <h3>{title}</h3>
                 : (
                     <SidebarOptionChannel>
-                        <span>$</span>{title}
+                        <span>#</span>{title}
                     </SidebarOptionChannel>
                   )
             }

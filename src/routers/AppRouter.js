@@ -23,7 +23,6 @@ export const AppRouter = () => {
             <Body>
                 <SideBar />
                 <Routes>
-                    <Route exact path = "/auth/login" element = {<LoginScreen />} />
                     <Route exact path = "/chat" element = {<Chat />} />
                 </Routes>
             </Body>
