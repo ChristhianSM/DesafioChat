@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import CreateIcon from '@mui/icons-material/Create';
@@ -10,6 +10,7 @@ import { SidebarOption } from './SidebarOption';
 import { addDoc, collection } from 'firebase/firestore'
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { db } from '../../firebase';
+import { useSelector } from 'react-redux';
 
 const SidebarContainer = styled.div`
     background-color : #ededed;
@@ -88,6 +89,27 @@ const SidebarOptionContainer = styled.div`
 export const SideBar = ({name}) => {
 
     const [channels, loading, error] = useCollection(collection(db, 'rooms'));
+
+    const {contactos} = useSelector(state => state.auth);
+    // Variable de filtro de contactos
+    const [contactosFiltrados, setcontactosFiltrados] = useState([])
+
+    // Para los inputs
+    const [inputContacto, setInputContacto] = useState("");
+
+    const  handleInput = (e) => {
+        setInputContacto(e.target.value);
+        filtrar(e.target.value) ;
+    }
+    
+    const filtrar = (terminoBusqueda) => {
+        const resultadoBusqueda = contactos.filter( contacto => {
+            if (contacto.toLowerCase().includes(terminoBusqueda.toLowerCase())) {
+                return contacto
+            }
+        })
+        setcontactosFiltrados(resultadoBusqueda)
+    }
     return (
         <SidebarContainer>
             <Header>
@@ -106,11 +128,39 @@ export const SideBar = ({name}) => {
                     <PeopleAltIcon  fontSize = 'small' style = {{padding: "10px"}}></PeopleAltIcon>
                     <h3>Contactos</h3>
                 </div>
-                <input type="text"  placeholder='Buscar Conatacto'/>
+                <form>
+                    <input 
+                        type="text"  
+                        placeholder='Buscar Conatacto'
+                        onChange={handleInput}
+                        value={inputContacto}
+                    />
+                </form>
                 <div className='contactos'>
-                    <SidebarOption Icon = {PeopleAltIcon} title = "Christhian"/>
-                    <SidebarOption Icon = {PeopleAltIcon} title = "Cristina"/>
-                    <SidebarOption Icon = {PeopleAltIcon} title = "Romualdo"/>
+                    {
+                        contactosFiltrados.length > 0 
+                        ?
+                        contactosFiltrados.map( (contacto) => {
+                            return (
+                                <SidebarOption 
+                                    key={contacto}
+                                    Icon = {PeopleAltIcon}
+                                    title = {contacto}
+                                />
+                            )
+                        })
+                        :
+                        contactos?.map( (contacto) => {
+                            return (
+                                <SidebarOption 
+                                    key={contacto}
+                                    Icon = {PeopleAltIcon}
+                                    title = {contacto}
+                                />
+                            )
+                        })
+
+                    }
                 </div>
             </SidebarOptionContainer>
             

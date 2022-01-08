@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, query } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase"
 import { types } from "../types/types"
 
@@ -6,29 +6,21 @@ import { types } from "../types/types"
 export const startLogin = (data) => {
     return async (dispatch) => {
         const newContactos = {
-            contactos : ['Cristina', 'Percy', 'Javier'] 
+            contactos : ['Cristina', 'Percy', 'Javier', 'Alicia', 'Jaime', 'Lucia', 'Carrion', 'Tadeo', 'Renzo'], 
+            chats : ['Jaime', 'Lucia', 'Carrion', 'Tadeo', 'Renzo'],
+            info : data
         }
-        await addDoc(collection(db, `user/${data.uid}/contactos`), newContactos);
-        await addDoc(collection(db, `user/${data.uid}/info`), data);
+        await setDoc(doc(db, `user/${data.uid}`), newContactos);
+       
         dispatch(login(data));
     }
 }
 
 export const startContactos = (uid) => {
     return async (dispatch) => {
-        console.log(uid)
-        const contactosSnap = await getDocs(query(collection(db, `user/${uid}/contactos`)))
-        const contactos = [];
-        
-        contactosSnap.forEach( snapHijo => {
-            contactos.push({
-                id: snapHijo.id,
-                ...snapHijo.data()
-            })
-        })
+        const contactosSnap = await getDoc(doc(db, `user/${uid}`))
 
-        console.log(contactos);
-        dispatch(setContactos(contactos));
+        dispatch(setContactos( contactosSnap.data().contactos));
     }
 }
 
@@ -40,7 +32,6 @@ export const setContactos = (contactos) => {
 }
 
 export const  login= (data) => {
-    console.log(data)
     return {
         type: types.login,
         payload : data
