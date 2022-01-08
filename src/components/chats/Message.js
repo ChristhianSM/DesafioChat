@@ -40,7 +40,7 @@ export const Message = ({message, timeStamp, user,image}) => {
                 <h4>
                     {user}{' '}
                     <span>
-                        { formateo}
+                        { formateo }
                     </span>
                 </h4>
                 <p>{message}</p>

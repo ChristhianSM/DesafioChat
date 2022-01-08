@@ -6,3 +6,4 @@ export const enterRoom = (id) => {
         payload : id
     }
 }
+

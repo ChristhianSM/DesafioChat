@@ -72,41 +72,46 @@ export const Chat = () => {
 
     return (
         <ChatContainer> 
-            <HeaderChat>
-                <HeaderLeft>
-                    <h4><strong>#{roomDetails?.data().name}</strong></h4>
-                    <StarBorderIcon />
-                </HeaderLeft>
-                <HeaderRight>
-                    <p>
-                        <InfoIcon /> Details
-                    </p>
-                </HeaderRight>
-            </HeaderChat>
-
-            <ChatMessages>
-                {
-                    roomMessage?.docs.map( doc => {
-                        const {message, timeStamp, user , image} = doc.data();
-
-                        return (
-                            <Message 
-                                key={ doc.id}
-                                message = {message}
-                                timeStamp = {timeStamp}
-                                user = {user}
-                                image = {image}
-                            />
-                        )  
-                    })
-                }
-            </ChatMessages>
-
-            <ChatInput 
-                chatRef = {chatRef}
-                channelName={roomDetails?.data().name}
-                channelId = {idRoom}
-            />
+            {
+                roomDetails && roomMessage &&
+                <>
+                    <HeaderChat>
+                        <HeaderLeft>
+                            <h4><strong>#{roomDetails?.data().name}</strong></h4>
+                            <StarBorderIcon />
+                        </HeaderLeft>
+                        <HeaderRight>
+                            <p>
+                                <InfoIcon /> Details
+                            </p>
+                        </HeaderRight>
+                    </HeaderChat>
+        
+                    <ChatMessages>
+                        {
+                            roomMessage?.docs.map( doc => {
+                                const {message, timeStamp, user , image} = doc.data();
+        
+                                return (
+                                    <Message 
+                                        key={ doc.id}
+                                        message = {message}
+                                        timeStamp = {timeStamp}
+                                        user = {user}
+                                        image = {image}
+                                    />
+                                )  
+                            })
+                        }
+                    </ChatMessages>
+        
+                    <ChatInput 
+                        chatRef = {chatRef}
+                        channelName={roomDetails?.data().name}
+                        channelId = {idRoom}
+                    />                
+                </>
+            }
         </ChatContainer>
     )
 }

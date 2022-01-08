@@ -3,14 +3,7 @@ import styled from 'styled-components'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import CreateIcon from '@mui/icons-material/Create';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import AppsIcon from '@mui/icons-material/Apps';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddIcon from '@mui/icons-material/Add';
 
 import { SidebarOption } from './SidebarOption';
@@ -72,14 +65,34 @@ const Info = styled.div`
 
 `
 
-export const SideBar = () => {
+const SidebarOptionContainer = styled.div`
+    .title {
+        display : flex;
+        align-items: center;
+        font-size : 15px;
+    }
+
+    .contactos { 
+        height: 150px;
+        overflow-y :scroll
+    }
+
+    input {
+        outline: none;
+        padding : 5px;
+        margin : 0 10px;
+        margin-bottom: 10px;
+    }
+`
+
+export const SideBar = ({name}) => {
 
     const [channels, loading, error] = useCollection(collection(db, 'rooms'));
     return (
         <SidebarContainer>
             <Header>
                 <Info>
-                    <h2>Christhian</h2>
+                    <h2>{name}</h2>
                     <h3>
                         <FiberManualRecordIcon />
                         Conectado
@@ -88,22 +101,34 @@ export const SideBar = () => {
                 <CreateIcon />
             </Header>
             {/* Options */}
-            <SidebarOption Icon = {InsertCommentIcon} title = "Threads"/>
-            <SidebarOption Icon = {InboxIcon} title = "Mentions & reactions"/>
-            <SidebarOption Icon = {DraftsIcon} title = "Saved Items"/>
-            <SidebarOption Icon = {BookmarkIcon} title = "Channel browser"/>
-            <SidebarOption Icon = {PeopleAltIcon} title = "People & groups"/>
-            <SidebarOption Icon = {AppsIcon} title = "Apps"/>
-            <SidebarOption Icon = {FileCopyIcon} title = "File browser"/>
-            <SidebarOption Icon = {ExpandLessIcon} title = "Show Less"/>
-
+            <SidebarOptionContainer>
+                <div className='title'>
+                    <PeopleAltIcon  fontSize = 'small' style = {{padding: "10px"}}></PeopleAltIcon>
+                    <h3>Contactos</h3>
+                </div>
+                <input type="text"  placeholder='Buscar Conatacto'/>
+                <div className='contactos'>
+                    <SidebarOption Icon = {PeopleAltIcon} title = "Christhian"/>
+                    <SidebarOption Icon = {PeopleAltIcon} title = "Cristina"/>
+                    <SidebarOption Icon = {PeopleAltIcon} title = "Romualdo"/>
+                </div>
+            </SidebarOptionContainer>
+            
+            <hr />
+            <SidebarOptionContainer>
+                <div className='title'>
+                    <InsertCommentIcon  fontSize = 'small' style = {{padding: "10px"}}></InsertCommentIcon>
+                    <h3>Chats</h3>
+                </div>
+                <input type="text"  placeholder='Buscar chat'/>
+                <SidebarOption Icon = {PeopleAltIcon} title = "Christhian"/>
+                <SidebarOption Icon = {PeopleAltIcon} title = "Cristina"/>
+                <SidebarOption Icon = {PeopleAltIcon} title = "Romualdo"/>
+            </SidebarOptionContainer>
+        
             <hr />
 
-            <SidebarOption Icon = {ExpandMoreIcon} title = "Channels"/>
-
-            <hr />
-
-            <SidebarOption Icon = {AddIcon} addChannelOption  title = "Add Channel"/>
+            <SidebarOption Icon = {AddIcon} addChannelOption  title = "Agregar Grupo"/>
 
             {
                 channels?.docs.map( doc => (

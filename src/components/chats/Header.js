@@ -68,7 +68,7 @@ const HeaderAvatar = styled(Avatar)`
         opacity: 0.8;
     }
 `
-export const Header = () => {
+export const Header = ({name}) => {
     return (
         <HeaderContainer>
             {/* Header Left */}
