@@ -18,9 +18,19 @@ export const startLogin = (data) => {
 
 export const startContactos = (uid) => {
     return async (dispatch) => {
-        const contactosSnap = await getDoc(doc(db, `user/${uid}`))
+        const contactosSnap = await getDoc(doc(db, `user/${uid}`));
 
         dispatch(setContactos( contactosSnap.data().contactos));
+        dispatch(setChats( contactosSnap.data().chats));
+    }
+}
+
+export const cambiarNombreUsuario = (name) => {
+    return async (dispatch, getState) => {
+        const uid = getState().auth.uid;
+        // await updateDoc(doc(db, `user/${uid}`), {
+        //     name
+        // })
     }
 }
 
@@ -28,6 +38,13 @@ export const setContactos = (contactos) => {
     return {
         type: types.setContactos,
         payload : contactos
+    }
+}
+
+export const setChats = (chats) => {
+    return {
+        type: types.setChats,
+        payload : chats
     }
 }
 

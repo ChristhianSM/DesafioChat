@@ -52,9 +52,7 @@ export const AppRouter = () => {
                 <>
                     <Header/>
                     <Body>
-                        <SideBar 
-                            name = {user.displayName}
-                        />
+                        <SideBar />
                         <Routes>
                             <Route exact path = "/" element = {<Chat />} />
                         </Routes>

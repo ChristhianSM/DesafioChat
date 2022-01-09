@@ -10,12 +10,13 @@ import { SidebarOption } from './SidebarOption';
 import { addDoc, collection } from 'firebase/firestore'
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { db } from '../../firebase';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { cambiarNombreUsuario } from '../../actions/auth';
 
 const SidebarContainer = styled.div`
     background-color : #ededed;
     flex: 0.3;
-    margin-top: 60px;
+    margin-top: 70px;
     max-width:260px;
     border-top: 1px solid #49274b;
 
@@ -38,6 +39,7 @@ const Header = styled.div`
         font-size: 18px;
         background-color: white;
         border-radius: 999px;
+        cursor: pointer;
     }
 `
 
@@ -86,20 +88,26 @@ const SidebarOptionContainer = styled.div`
     }
 `
 
-export const SideBar = ({name}) => {
+export const SideBar = () => {
 
-    const [channels, loading, error] = useCollection(collection(db, 'rooms'));
+    const dispatch = useDispatch();
+    
+    const [channels] = useCollection(collection(db, 'rooms'));
 
-    const {contactos} = useSelector(state => state.auth);
+    // Traemos del estado los contactos y los chats
+    const {contactos, chats , name} = useSelector(state => state.auth);
+
     // Variable de filtro de contactos
     const [contactosFiltrados, setcontactosFiltrados] = useState([])
+    const [chatsFiltrados, setchatsFiltrados] = useState([])
 
     // Para los inputs
     const [inputContacto, setInputContacto] = useState("");
+    const [inputChat, setInputChat] = useState("");
 
-    const  handleInput = (e) => {
+    const  handleInputContacto = (e) => {
         setInputContacto(e.target.value);
-        filtrar(e.target.value) ;
+        setcontactosFiltrados(filtrar(e.target.value)) ;
     }
     
     const filtrar = (terminoBusqueda) => {
@@ -108,7 +116,19 @@ export const SideBar = ({name}) => {
                 return contacto
             }
         })
-        setcontactosFiltrados(resultadoBusqueda)
+
+        return resultadoBusqueda;
+    }
+
+    const  handleInputChat = (e) => {
+        setInputChat(e.target.value);
+        setchatsFiltrados(filtrar(e.target.value)) ;
+    }
+
+
+    // Cambiar Nombre del usuario
+    const handleChangeName = () => {
+        dispatch(cambiarNombreUsuario());
     }
     return (
         <SidebarContainer>
@@ -120,7 +140,9 @@ export const SideBar = ({name}) => {
                         Conectado
                     </h3>
                 </Info>
-                <CreateIcon />
+                <CreateIcon 
+                    onClick = {handleChangeName} 
+                />
             </Header>
             {/* Options */}
             <SidebarOptionContainer>
@@ -131,8 +153,8 @@ export const SideBar = ({name}) => {
                 <form>
                     <input 
                         type="text"  
-                        placeholder='Buscar Conatacto'
-                        onChange={handleInput}
+                        placeholder='Buscar Contacto'
+                        onChange={handleInputContacto}
                         value={inputContacto}
                     />
                 </form>
@@ -170,10 +192,38 @@ export const SideBar = ({name}) => {
                     <InsertCommentIcon  fontSize = 'small' style = {{padding: "10px"}}></InsertCommentIcon>
                     <h3>Chats</h3>
                 </div>
-                <input type="text"  placeholder='Buscar chat'/>
-                <SidebarOption Icon = {PeopleAltIcon} title = "Christhian"/>
-                <SidebarOption Icon = {PeopleAltIcon} title = "Cristina"/>
-                <SidebarOption Icon = {PeopleAltIcon} title = "Romualdo"/>
+                <input 
+                    type="text"  
+                    onChange={handleInputChat}
+                    value={inputChat} 
+                    placeholder='Buscar chat'
+                    />
+                <div className='contactos'>
+                    {
+                        chatsFiltrados.length > 0 
+                        ?
+                        chatsFiltrados.map( (contacto) => {
+                            return (
+                                <SidebarOption 
+                                    key={contacto}
+                                    Icon = {PeopleAltIcon}
+                                    title = {contacto}
+                                />
+                            )
+                        })
+                        :
+                        chats?.map( (chat) => {
+                            return (
+                                <SidebarOption 
+                                    key={chat}
+                                    Icon = {PeopleAltIcon}
+                                    title = {chat}
+                                />
+                            )
+                        })
+
+                    }
+                </div>
             </SidebarOptionContainer>
         
             <hr />

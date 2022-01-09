@@ -15,6 +15,12 @@ export const authReducer = (state = {}, action) => {
                 ...state,
                 contactos : action.payload
             };
+
+        case types.setChats:
+            return {
+                ...state,
+                chats : action.payload
+            };
         
 
         default:

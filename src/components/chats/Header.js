@@ -4,6 +4,7 @@ import Avatar from '@mui/material/Avatar'
 import SearchIcon from '@mui/icons-material/Search';
 import HelpIcon from '@mui/icons-material/Help';
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import { useSelector } from 'react-redux';
 
 
 const HeaderContainer = styled.div`
@@ -26,29 +27,13 @@ const HeaderLeft = styled.div`
         margin-left : auto;
         margin-right : 30px
     }
-`
 
-const HeaderSearch = styled.div`
-    flex: 0.4;
-    opacity: 1;
-    border-radius:6px;
-    background-color: white;
-    text-align: center;
-    align-items: center;
-    display: flex;
-    padding: 0 50px;
-    color: gray;
-    border: 1px gray solid;
-
-    > input {
-        background-color: transparent;
-        border: none;
-        text-align: center;
-        outline: none;
-        min-width :30vw;
+    img {
+        width: 60px;
+        height: 60px;
+        border-radius: 100%;
     }
 `
-
 const HeaderRight = styled.div`
     flex: 0.3;
     display: flex;
@@ -61,32 +46,18 @@ const HeaderRight = styled.div`
 
 `
 
-const HeaderAvatar = styled(Avatar)`
-    cursor: pointer;
-
-    :hover {
-        opacity: 0.8;
-    }
-`
 export const Header = ({name}) => {
+
+    const {photo} = useSelector(state => state.auth);
+
     return (
         <HeaderContainer>
             {/* Header Left */}
             <HeaderLeft>
-                <HeaderAvatar 
-                    
-                />
+                <img src={photo} alt="avatar" />
                 <AccessTimeIcon />
             </HeaderLeft>
-            
-            {/* Header Search */}
-            <HeaderSearch>
-                <SearchIcon />
-                <input 
-                    type="text" 
-                    placeholder='Busque algun chat'
-                />
-            </HeaderSearch>
+
             {/* Header Right */}
 
             <HeaderRight>
